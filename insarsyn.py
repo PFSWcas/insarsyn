@@ -76,5 +76,5 @@ if __name__ == "__main__":
             ax.set_yticks([])
 
         filename = 'insarsyn_{}.png'.format(name.lower().replace(' ', '_'))
-        fig.savefig(filename, dpi=150)
+        fig.savefig('readme_imgs/' + filename, dpi=150)
 
