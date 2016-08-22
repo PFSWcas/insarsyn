@@ -51,6 +51,7 @@ if __name__ == "__main__":
     areas[patterns.squares]        = {'shape': shape}
     areas[patterns.checkers]       = {'shape': shape}
     areas[fractals.diamond_square] = {'size': shape[0], 'seed': 42}
+    areas[patterns.pizza]          = {'shape': shape, 'nslices': 16}
 
     plots = [('Unwrapped Phase',
               lambda x: x,

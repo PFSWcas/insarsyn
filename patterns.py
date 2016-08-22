@@ -156,3 +156,21 @@ def checkers(shape, period=20):
         s1, s2 = s2, s1
 
     return data
+
+def pizza(shape, nslices=12):
+    assert nslices % 2 == 0
+    xs = np.linspace(-1.0, 1.0, shape[0])
+    ys = np.linspace(-1.0, 1.0, shape[1])
+    real, imag = np.meshgrid(xs, ys)
+    z = real+1j*imag
+    data = np.zeros(z.shape)
+    data[abs(z) < 1] = 1
+    angles = np.linspace(-np.pi, np.pi, nslices+1)
+    a1s = angles[::2]
+    a2s = angles[1::2]
+    for a1, a2 in zip(a1s, a2s):
+       m1 = a1 < np.angle(z)
+       m2 = np.angle(z) < a2
+       m = np.logical_and(m1, m2)
+       data[m] = 0
+    return data
