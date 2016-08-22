@@ -40,12 +40,14 @@ if __name__ == "__main__":
     areas[patterns.plateau]        = {'shape': shape, 'mid_width': 32}
     areas[patterns.const_slope]    = {'shape': shape}
     areas[patterns.sine]           = {'shape': shape, 'omega': 0.1}
+    areas[patterns.logfreq]        = {'shape': shape, 'doublerate': 43}
     areas[patterns.step_slope]     = {'shape': shape}
     areas[patterns.unit_step]      = {'shape': shape}
     areas[patterns.raised_cos]     = {'shape': shape}
     areas[patterns.banana]         = {'shape': shape}
     areas[patterns.peaks]          = {'shape': shape}
     areas[patterns.zebra]          = {'shape': shape}
+    areas[patterns.logbar]         = {'shape': shape, 'doublerate': 43}
     areas[patterns.squares]        = {'shape': shape}
     areas[patterns.checkers]       = {'shape': shape}
     areas[fractals.diamond_square] = {'size': shape[0], 'seed': 42}
@@ -58,7 +60,7 @@ if __name__ == "__main__":
               {'cmap': plt.get_cmap('hsv'), 'vmin': -np.pi, 'vmax': np.pi})]
 
     for (name, modder, plot_opts) in plots:
-        fig = plt.figure(figsize=(8, 6.2))
+        fig = plt.figure(figsize=(8, 5.2))
         fig.suptitle(name, fontsize=12)
         fig.subplots_adjust(left=0.05,
                             right=0.95,
@@ -66,7 +68,7 @@ if __name__ == "__main__":
                             hspace=0.2,
                             bottom=0.05,
                             top=0.9)
-        gs = gridspec.GridSpec(3, 4)
+        gs = gridspec.GridSpec(3, 5)
 
         for idx, (method, args) in enumerate(areas.items()):
             ax = plt.subplot(gs[idx])

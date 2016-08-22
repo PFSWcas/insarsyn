@@ -37,6 +37,19 @@ def sine(shape, omega=0.2):
 
     return data
 
+def logfreq(shape, doublerate=50):
+    data = 0.5*(np.sin(2*np.pi*np.exp(np.log(2)*np.arange(shape[1])/doublerate))+1)
+    data = np.tile(data, (shape[0], 1))
+
+    return data
+
+def logbar(shape, doublerate=50):
+    data = logfreq(shape, doublerate)
+    data[data > 0.5] = 1
+    data[data <= 0.5] = 0
+
+    return data
+
 
 def step_slope(shape):
     data = const_slope(shape)
