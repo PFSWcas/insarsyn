@@ -6,6 +6,7 @@ from collections import OrderedDict
 import patterns
 import fractals
 import backscatter
+import coherence
 
 
 def wrap_phase(phi):
