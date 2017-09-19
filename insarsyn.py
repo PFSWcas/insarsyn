@@ -32,6 +32,34 @@ def gen_noisy_slcs(amp, phi, coh):
     return (slc1, slc2)
 
 
+def gen_noisy_stack(amps, phis, cohs):
+    """ generates a stack of noisy and correlated SLCs
+
+    :params amps: 3D numpy array of the SLCs amplitude
+    :params phis: 3D numpy array of the SLCs phases
+    :params cohs: 4D numpy array of all SLCs coherence combinations
+
+    """
+
+    # outer products
+    phis = np.einsum('i..., j...->ij...', np.exp(1j*phis), np.exp(-1j*phis))
+    refs = np.einsum('i..., j...->ij...', amps, amps)
+
+    cov = refs*phis*cohs
+
+    slcs = np.empty(amps.shape, dtype=np.complex)
+
+    for x in range(slcs.shape[1]):
+        for y in range(slcs.shape[2]):
+            real = np.random.multivariate_normal(np.zeros(slcs.shape[0]), cov[:, :, x, y].real)
+            imag = np.random.multivariate_normal(np.zeros(slcs.shape[0]), cov[:, :, x, y].imag)
+            slcs[:, x, y] = real + 1j*imag
+
+    return slcs
+
+
+
+
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
     import matplotlib.gridspec as gridspec
