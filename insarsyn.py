@@ -41,19 +41,18 @@ def gen_noisy_stack(amps, phis, cohs):
 
     """
 
-    # outer products
-    phis = np.einsum('i..., j...->ij...', np.exp(1j*phis), np.exp(-1j*phis))
+    # outer product
     refs = np.einsum('i..., j...->ij...', amps, amps)
 
-    cov = refs*phis*cohs
+    cov = refs*cohs
 
     slcs = np.empty(amps.shape, dtype=np.complex)
 
     for x in range(slcs.shape[1]):
         for y in range(slcs.shape[2]):
-            real = np.random.multivariate_normal(np.zeros(slcs.shape[0]), cov[:, :, x, y].real)
-            imag = np.random.multivariate_normal(np.zeros(slcs.shape[0]), cov[:, :, x, y].imag)
-            slcs[:, x, y] = real + 1j*imag
+            real = np.random.multivariate_normal(np.zeros(slcs.shape[0]), cov[:, :, x, y])
+            imag = np.random.multivariate_normal(np.zeros(slcs.shape[0]), cov[:, :, x, y])
+            slcs[:, x, y] = (real+1j*imag)*np.exp(1j*phis[:, x, y])/np.sqrt(2)
 
     return slcs
 
