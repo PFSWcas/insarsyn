@@ -8,6 +8,8 @@ import fractals
 import backscatter
 import coherence
 
+import stack
+
 
 def wrap_phase(phi):
     return (phi % (2*np.pi)) - np.pi
@@ -50,9 +52,8 @@ def gen_noisy_stack(amps, phis, cohs):
 
     for x in range(slcs.shape[1]):
         for y in range(slcs.shape[2]):
-            real = np.random.multivariate_normal(np.zeros(slcs.shape[0]), cov[:, :, x, y])
-            imag = np.random.multivariate_normal(np.zeros(slcs.shape[0]), cov[:, :, x, y])
-            slcs[:, x, y] = (real+1j*imag)*np.exp(1j*phis[:, x, y])/np.sqrt(2)
+            slc_vec =  stack.multivariate_complex_normal(cov[:, :, x, y])
+            slcs[:, x, y] = slc_vec*np.exp(1j*phis[:, x, y])
 
     return slcs
 
