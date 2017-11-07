@@ -48,3 +48,19 @@ def test_amp_phi_coh2cov():
     assert cov.shape == (n_dim, n_dim)
     assert cov.dtype == np.complex
     np.testing.assert_equal(cov, cov.T.conj())
+
+
+def test_amps_phis_cohs2covs():
+
+    shape = (7, 5, 3)
+
+    amps = np.ones(shape)
+    phis = np.ones(shape)
+    cohs = np.ones((shape[0], *shape))
+
+    covs = stack.amps_phis_cohs2covs(amps, phis, cohs)
+
+    assert covs.shape == cohs.shape
+
+    covs_swap = np.swapaxes(covs, 0, 1)
+    np.testing.assert_equal(covs, covs_swap)
