@@ -1,2 +1,6 @@
 build
 *.swp
+dist
+*.egg-info
+__pycache__
+.cache
