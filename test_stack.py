@@ -3,6 +3,7 @@ import pytest
 
 import stack
 
+
 def test_multivariate_complex_normal():
     n_dim = 3
     n_samples = 100
@@ -74,3 +75,35 @@ def test_exp_decay_coh_mat():
     assert coh.shape == (M, M)
     np.testing.assert_equal(coh, coh.T)
     np.testing.assert_equal(coh[0], np.sort(coh[0])[::-1])
+
+
+def test_too_close():
+
+    outl = (3, 4, 5)
+    min_dis = (0, 2, 2)
+    prev_outls = [
+        (0, 0, 0),
+        (3, 8, 9),
+        (3, 5, 9),
+    ]
+
+    assert stack.too_close(outl, prev_outls, min_dis)
+    assert not stack.too_close(outl, prev_outls[:-1], min_dis)
+
+
+def test_gen_outliers():
+    stack_shape = (5, 4, 2)
+    amp = 1
+    size = 3
+
+    outl_crds = stack.gen_outliers(stack_shape, amp, size)
+
+    assert len(outl_crds) == size
+
+    coords = [x[0] for x in outl_crds]
+    outliers = np.array([x[1] for x in outl_crds])
+
+    np.testing.assert_array_almost_equal(np.abs(outliers), np.ones(size))
+
+    assert all(c >= (0, 0, 0) for c in coords)
+    assert all(c < stack_shape for c in coords)

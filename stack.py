@@ -54,7 +54,8 @@ def amps_phis_cohs2covs(amps, phis, cohs):
 
     for x in range(amps.shape[1]):
         for y in range(amps.shape[2]):
-            covs[:, :, x, y] = amp_phi_coh2cov(amps[:, x, y], phis[:, x, y], cohs[:, :, x, y])
+            covs[:, :, x, y] = amp_phi_coh2cov(amps[:, x, y], phis[:, x, y],
+                                               cohs[:, :, x, y])
 
     return covs
 
@@ -62,6 +63,43 @@ def amps_phis_cohs2covs(amps, phis, cohs):
 def exp_decay_coh_mat(M, lbda):
     """ generates a coherence matrix with exponential decay """
 
-    coh_vec = np.exp(-np.arange(0, M)*lbda)
+    coh_vec = np.exp(-np.arange(0, M) * lbda)
 
     return np.outer(coh_vec, coh_vec.T)
+
+
+def too_close(new_outl, prev_outls, min_dis):
+    """ returns true if any of the distances between
+    
+    new_outl to prev_outls is smaller than min_dis
+
+    """
+
+    for po in prev_outls:
+        dis = (abs(x - y) for x, y in zip(new_outl, po))
+        if any(x < y for x, y in zip(dis, min_dis)):
+            return True
+    return False
+
+
+def gen_outliers(stack_shape, amp, size, min_dis=None):
+    """ generates a list of outliers
+
+    :params stack_shape: tuple, shape of the stack,
+        i.e. interval for the outliers
+
+    """
+    outliers = []
+    coords = []
+
+    if min_dis is None:
+        min_dis = (0, 0, 0)
+
+    while len(outliers) < size:
+        coord = tuple(
+            np.random.randint(o, x - o)
+            for x, o in zip(stack_shape, min_dis))
+        if not too_close(coord, coords, min_dis):
+            coords.append(coord)
+            outliers.append(amp * np.exp(1j * np.random.uniform(-np.pi, np.pi)))
+    return list(zip(coords, outliers))
