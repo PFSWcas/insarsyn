@@ -64,3 +64,13 @@ def test_amps_phis_cohs2covs():
 
     covs_swap = np.swapaxes(covs, 0, 1)
     np.testing.assert_equal(covs, covs_swap)
+
+
+def test_exp_decay_coh_mat():
+    M = 7
+
+    coh = stack.exp_decay_coh_mat(M, 0.1)
+
+    assert coh.shape == (M, M)
+    np.testing.assert_equal(coh, coh.T)
+    np.testing.assert_equal(coh[0], np.sort(coh[0])[::-1])

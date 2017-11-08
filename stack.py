@@ -57,3 +57,11 @@ def amps_phis_cohs2covs(amps, phis, cohs):
             covs[:, :, x, y] = amp_phi_coh2cov(amps[:, x, y], phis[:, x, y], cohs[:, :, x, y])
 
     return covs
+
+
+def exp_decay_coh_mat(M, lbda):
+    """ generates a coherence matrix with exponential decay """
+
+    coh_vec = np.exp(-np.arange(0, M)*lbda)
+
+    return np.outer(coh_vec, coh_vec.T)
