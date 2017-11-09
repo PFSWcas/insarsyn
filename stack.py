@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.stats import multivariate_normal
 from scipy.linalg import toeplitz
+from scipy.ndimage.filters import convolve
 
 
 def multivariate_complex_normal(cov, size=1):
@@ -71,7 +72,7 @@ def exp_decay_coh_mat(M, lbda):
 
 def too_close(new_outl, prev_outls, min_dis):
     """ returns true if any of the distances between
-    
+
     new_outl to prev_outls is smaller than min_dis
 
     """
@@ -98,9 +99,23 @@ def gen_outliers(stack_shape, amp, size, min_dis=None):
 
     while len(outliers) < size:
         coord = tuple(
-            np.random.randint(o, x - o)
-            for x, o in zip(stack_shape, min_dis))
+            np.random.randint(o, x - o) for x, o in zip(stack_shape, min_dis))
         if not too_close(coord, coords, min_dis):
             coords.append(coord)
-            outliers.append(amp * np.exp(1j * np.random.uniform(-np.pi, np.pi)))
+            outliers.append(amp * np.exp(1j * np.random.uniform(-np.pi,
+                                                                np.pi)))
     return outliers, coords
+
+
+def add_outliers2stack(stack, outliers, coords, selem=np.ones((1, 3, 3))):
+    outlier_stack = np.zeros_like(stack)
+    for outl, coord in zip(outliers, coords):
+        outlier_stack[coord] = outl
+
+    outlier_stack = convolve(outlier_stack.real, selem, mode='constant') + convolve(
+        outlier_stack.imag, selem, mode='constant')
+
+    mask = outlier_stack != 0
+    stack[mask] = outlier_stack[mask]
+
+    return stack
