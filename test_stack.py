@@ -97,12 +97,9 @@ def test_gen_outliers():
     amp = 1
     size = 3
 
-    outl_crds = stack.gen_outliers(stack_shape, amp, size)
+    outliers, coords = stack.gen_outliers(stack_shape, amp, size)
 
-    assert len(outl_crds) == size
-
-    coords = [x[0] for x in outl_crds]
-    outliers = np.array([x[1] for x in outl_crds])
+    assert len(outliers) == len(coords) == size
 
     np.testing.assert_array_almost_equal(np.abs(outliers), np.ones(size))
 

@@ -103,4 +103,4 @@ def gen_outliers(stack_shape, amp, size, min_dis=None):
         if not too_close(coord, coords, min_dis):
             coords.append(coord)
             outliers.append(amp * np.exp(1j * np.random.uniform(-np.pi, np.pi)))
-    return list(zip(coords, outliers))
+    return outliers, coords
