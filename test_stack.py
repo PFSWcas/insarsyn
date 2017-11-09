@@ -75,6 +75,7 @@ def test_exp_decay_coh_mat():
     assert coh.shape == (M, M)
     np.testing.assert_equal(coh, coh.T)
     np.testing.assert_equal(coh[0], np.sort(coh[0])[::-1])
+    np.testing.assert_equal(np.diag(coh), np.ones(M))
 
 
 def test_too_close():

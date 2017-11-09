@@ -1,5 +1,6 @@
 import numpy as np
 from scipy.stats import multivariate_normal
+from scipy.linalg import toeplitz
 
 
 def multivariate_complex_normal(cov, size=1):
@@ -65,7 +66,7 @@ def exp_decay_coh_mat(M, lbda):
 
     coh_vec = np.exp(-np.arange(0, M) * lbda)
 
-    return np.outer(coh_vec, coh_vec.T)
+    return toeplitz(coh_vec)
 
 
 def too_close(new_outl, prev_outls, min_dis):
