@@ -110,12 +110,12 @@ def test_gen_outliers():
 def test_add_outliers2stack():
     stk = np.zeros((1, 4, 5), dtype=np.complex)
     coords = [(0, 1, 2), (0, 3, 0)]
-    outliers = [1, 1]
+    outliers = [1j, 1]
     selem = np.ones((1, 3, 3))
 
-    des_stk = np.array([[[0, 1, 1, 1, 0],
-                         [0, 1, 1, 1, 0],
-                         [1, 2, 1, 1, 0],
+    des_stk = np.array([[[0, 1j, 1j, 1j, 0],
+                         [0, 1j, 1j, 1j, 0],
+                         [1, 1+1j, 1j, 1j, 0],
                          [1, 1, 0, 0, 0]]])
 
     np.testing.assert_array_equal(stack.add_outliers2stack(stk, outliers, coords, selem), des_stk)

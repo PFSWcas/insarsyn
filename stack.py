@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.stats import multivariate_normal
 from scipy.linalg import toeplitz
-from scipy.ndimage.filters import convolve
+from scipy.ndimage import convolve
 
 
 def multivariate_complex_normal(cov, size=1):
@@ -90,6 +90,8 @@ def gen_outliers(stack_shape, amp, size, min_dis=None):
     :params stack_shape: tuple, shape of the stack,
         i.e. interval for the outliers
 
+    :returns: a tuple containing two lists: the outliers and their coordinates
+
     """
     outliers = []
     coords = []
@@ -112,10 +114,11 @@ def add_outliers2stack(stack, outliers, coords, selem=np.ones((1, 3, 3))):
     for outl, coord in zip(outliers, coords):
         outlier_stack[coord] = outl
 
-    outlier_stack = convolve(outlier_stack.real, selem, mode='constant') + convolve(
+    outlier_stack_conv = convolve(outlier_stack.real, selem, mode='constant') + 1j*convolve(
         outlier_stack.imag, selem, mode='constant')
 
-    mask = outlier_stack != 0
-    stack[mask] = outlier_stack[mask]
+
+    mask = outlier_stack_conv != 0
+    stack[mask] = outlier_stack_conv[mask]
 
     return stack
