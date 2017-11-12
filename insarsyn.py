@@ -42,11 +42,6 @@ def gen_noisy_stack(amps, phis, cohs):
 
     """
 
-    # outer product
-    refs = np.einsum('i..., j...->ij...', amps, amps)
-
-    cov = refs * cohs
-
     slcs = np.empty(amps.shape, dtype=np.complex)
 
     covs = stack.amps_phis_cohs2covs(amps, phis, cohs)
