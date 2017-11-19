@@ -16,7 +16,6 @@ def multivariate_complex_normal(cov, size=1):
     # complex isomorphism
     cov_real = np.kron(np.eye(2), cov.real) + np.kron(
         np.array([[0, -1], [1, 0]]), cov.imag)
-    cov_real *= 0.5
 
     xy = __multivariate_normal(cov_real, size)
 
